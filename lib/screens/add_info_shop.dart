@@ -10,37 +10,33 @@ class AddInfoShop extends StatefulWidget {
 }
 
 class _AddInfoShopState extends State<AddInfoShop> {
-
 // field
 
-double lat, lng;
+  double lat, lng;
 
-@override
-void initState() { 
-  super.initState();
-  findLatLng();
-}
+  @override
+  void initState() {
+    super.initState();
+    findLatLng();
+  }
 
-Future <Null> findLatLng()async{
- LocationData locationData = await findLocationData();
- lat = locationData.latitude;
- lng = locationData.longitude;
- print('lat = $lat, lng = $lng');
-}
+  Future<Null> findLatLng() async {
+    LocationData locationData = await findLocationData();
+    setState(() {
+      lat = locationData.latitude;
+      lng = locationData.longitude;
+    });
+    print('lat = $lat, lng = $lng');
+  }
 
-
-Future <LocationData> findLocationData()async{
- Location location = Location();
- try {
-   return location.getLocation();
- } catch (e) {
-   return null;
- }
-}
-
-
-
-
+  Future<LocationData> findLocationData() async {
+    Location location = Location();
+    try {
+      return location.getLocation();
+    } catch (e) {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +53,8 @@ Future <LocationData> findLocationData()async{
             MyStyle().mySizebox(),
             imageForm(),
             MyStyle().mySizebox(),
-            showMap(),
+            lat == null ? MyStyle().showProgrees() : showMap(),
+            // showMap(),
             MyStyle().mySizebox(),
             saveButton(),
             MyStyle().mySizebox(),
@@ -88,8 +85,16 @@ Future <LocationData> findLocationData()async{
         ),
       );
 
+  Set<Marker> showMarker() {
+    return <Marker>[
+      Marker(
+        markerId: MarkerId('myshop'),position: LatLng(lat, lng),infoWindow: InfoWindow(title: 'ร้านของฉัน',snippet: 'ละติจูด = $lat, ลองติจูด = $lng')
+      ),
+    ].toSet();
+  }
+
   Widget showMap() {
-    LatLng latLng = LatLng(13.319348, 100.935624);
+    LatLng latLng = LatLng(lat, lng);
     CameraPosition cameraPosition = CameraPosition(
       target: latLng,
       zoom: 16.0,
@@ -100,7 +105,7 @@ Future <LocationData> findLocationData()async{
       child: GoogleMap(
         initialCameraPosition: cameraPosition,
         mapType: MapType.normal,
-        onMapCreated: (controller) {},
+        onMapCreated: (controller) {},markers: showMarker(),
       ),
     );
   }
