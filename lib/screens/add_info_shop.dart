@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:moofood/utility/my_style.dart';
 
@@ -13,6 +16,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
 // field
 
   double lat, lng;
+  File file;
 
   @override
   void initState() {
@@ -88,8 +92,10 @@ class _AddInfoShopState extends State<AddInfoShop> {
   Set<Marker> showMarker() {
     return <Marker>[
       Marker(
-        markerId: MarkerId('myshop'),position: LatLng(lat, lng),infoWindow: InfoWindow(title: 'ร้านของฉัน',snippet: 'ละติจูด = $lat, ลองติจูด = $lng')
-      ),
+          markerId: MarkerId('myshop'),
+          position: LatLng(lat, lng),
+          infoWindow: InfoWindow(
+              title: 'ร้านของฉัน', snippet: 'ละติจูด = $lat, ลองติจูด = $lng')),
     ].toSet();
   }
 
@@ -105,7 +111,8 @@ class _AddInfoShopState extends State<AddInfoShop> {
       child: GoogleMap(
         initialCameraPosition: cameraPosition,
         mapType: MapType.normal,
-        onMapCreated: (controller) {},markers: showMarker(),
+        onMapCreated: (controller) {},
+        markers: showMarker(),
       ),
     );
   }
@@ -123,20 +130,33 @@ class _AddInfoShopState extends State<AddInfoShop> {
                   Icons.add_a_photo,
                   size: 36.0,
                 ),
-                onPressed: () {}),
+                onPressed: () => chooseImage(ImageSource.camera)),
             Container(
               width: 200.0,
-              child: Image.asset('images/image.png'),
+              child: file == null ? Image.asset('images/image.png') :Image.file(file),
             ),
             IconButton(
                 icon: Icon(
                   Icons.add_photo_alternate,
                   size: 36.0,
                 ),
-                onPressed: () {}),
+                onPressed: () => chooseImage(ImageSource.gallery)),
           ],
         ),
       );
+
+  Future<Null> chooseImage(ImageSource imageSource) async {
+    try {
+      var object = await ImagePicker.pickImage(
+        source: imageSource,
+        maxWidth: 512.0,
+        maxHeight: 512.0,
+      );
+      setState(() {
+        file = object;
+      });
+    } catch (e) {}
+  }
 
   Row nameForm() {
     return Row(
