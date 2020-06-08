@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:moofood/utility/my_constant.dart';
 import 'package:moofood/utility/my_style.dart';
 import 'package:moofood/utility/normal_dialog.dart';
 
@@ -71,7 +72,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<Null> checkUser() async {
-      String url = 'http://pussy9988.com/moofood/getUserWhereUser.php?isAdd=true&User=$user';
+      String url = '${MyConstant().domain}/moofood/getUserWhereUser.php?isAdd=true&User=$user';
 
       try {
          Response response = await Dio().get(url);
@@ -85,7 +86,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<Null> registerThread() async {
-    String url = 'http://pussy9988.com/moofood/addUser.php?isAdd=true&Name=$name&User=$user&Password=$password&ChooseType=$chooseType';
+    String url = '${MyConstant().domain}/moofood/addUser.php?isAdd=true&Name=$name&User=$user&Password=$password&ChooseType=$chooseType';
 
     try {
       Response response = await Dio().get(url);

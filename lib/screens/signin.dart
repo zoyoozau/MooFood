@@ -6,6 +6,7 @@ import 'package:moofood/model/user_modle.dart';
 import 'package:moofood/screens/main_rider.dart';
 import 'package:moofood/screens/main_shop.dart';
 import 'package:moofood/screens/main_user.dart';
+import 'package:moofood/utility/my_constant.dart';
 import 'package:moofood/utility/my_style.dart';
 import 'package:moofood/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,7 +80,7 @@ class _SignInState extends State<SignIn> {
 
   Future<Null> checkAuthen() async {
     String url =
-        'http://pussy9988.com/moofood/getUserWhereUser.php?isAdd=true&User=$user';
+        '${MyConstant().domain}/moofood/getUserWhereUser.php?isAdd=true&User=$user';
     try {
       Response response = await Dio().get(url);
       print('res = $response');
